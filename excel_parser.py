@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime as dt
 from argparse import ArgumentParser
 from os import listdir
 from os.path import join
@@ -16,18 +17,49 @@ col_names = [
 ]
 
 
+def get_start_datetime(shifts):
+    datetime = shifts["start_date"]
+    if isinstance(shifts["start_time"], dt.datetime):
+        datetime = datetime.replace(
+            hour=shifts["start_time"].hour, minute=shifts["start_time"].minute
+        )
+    return datetime
+
+
+def get_end_datetime(shifts):
+    if isinstance(shifts["end_date"], dt.datetime):
+        datetime = shifts["end_date"]
+    else:
+        # Assume that the time is supposed to refer to start_date
+        datetime = shifts["start_date"]
+    if isinstance(shifts["end_time"], dt.datetime):
+        datetime = datetime.replace(
+            hour=shifts["end_time"].hour, minute=shifts["end_time"].minute
+        )
+    return datetime
+
+
 def is_xlsx(file_name: str):
     return file_name.endswith(".xlsx")
 
 
 def parse_helper_form(xlsx_file: str):
-    shifts = read_excel(xlsx_file, skiprows=4, usecols="A:G", names=col_names)
+    shifts = read_excel(
+        xlsx_file,
+        skiprows=4,
+        usecols="A:G",
+        names=col_names,
+    )
     # drop rows that are completely missshapen
-    shifts.drop(subset=["num_helpers"])
-    shifts.drop(subset=["task"])
-    import pdb
+    shifts = shifts.dropna(subset=["num_helpers"])
 
-    pdb.set_trace()
+    # convert helpers to int
+    shifts = shifts.astype({"num_helpers": "int"})
+
+    # parse dates
+    shifts["start_datetime"] = shifts.apply(get_start_datetime, axis=1)
+    shifts["end_datetime"] = shifts.apply(get_end_datetime, axis=1)
+
     return shifts
 
 
