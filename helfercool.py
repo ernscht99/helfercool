@@ -1,16 +1,17 @@
 from session_commander import Session_commander
 
 
-
-def main(skip_network = False, use_login_file = False):
-    print("""
+def main(skip_network=False, use_login_file=False):
+    print(
+        """
     ---------------------------------------------------
                     Welcome to HELFERCOOL!
     Your tool to save time working with the helfertool
     ---------------------------------------------------
           
     PLS LOG IN :D
-    """)
+    """
+    )
     user_name = input("Username: ")
     password = input("Password: ")
     url = input("URL of helfertool")
@@ -19,10 +20,11 @@ def main(skip_network = False, use_login_file = False):
         sc = Session_commander(url)
 
     # Log in at helfertool
-    sc.login_server(user_name,password)
+    sc.login_server(user_name, password)
 
     while True:
-        print("""
+        print(
+            """
             OPTIONS:
             1. SHOW JOB List
             2. SHOW SHIFTS for a given JOB
@@ -32,7 +34,8 @@ def main(skip_network = False, use_login_file = False):
             6. CHANGE JOB
             7. CHANGE SHIFT
             69. END
-            """)
+            """
+        )
         selection = int(input("What do you want to do?"))
 
         if selection == 69:
@@ -61,4 +64,4 @@ def main(skip_network = False, use_login_file = False):
             pass
 
 
-main() 
+main()
