@@ -1,20 +1,21 @@
+#!/usr/bin/env python3
+import argparse
+
 from session_commander import Session_commander
 
 
-def main(skip_network=False, use_login_file=False):
+def main(url, user_name, skip_network=False, use_login_file=False):
     print(
         """
     ---------------------------------------------------
                     Welcome to HELFERCOOL!
     Your tool to save time working with the helfertool
     ---------------------------------------------------
-          
+
     PLS LOG IN :D
     """
     )
-    user_name = input("Username: ")
     password = input("Password: ")
-    url = input("URL of helfertool")
 
     if not skip_network:
         sc = Session_commander(url)
@@ -29,14 +30,19 @@ def main(skip_network=False, use_login_file=False):
             1. SHOW JOB List
             2. SHOW SHIFTS for a given JOB
             3. ADD JOB
-            4. ADD SHIFT(S) 
+            4. ADD SHIFT(S)
             5. VALIDITY CHECK SHIFTS
             6. CHANGE JOB
             7. CHANGE SHIFT
             69. END
             """
         )
-        selection = int(input("What do you want to do?"))
+        selection_str = input("What do you want to do?\n")
+        try:
+            selection = int(selection_str)
+        except ValueError:
+            print("Invalid selection")
+            continue
 
         if selection == 69:
             print("NICE!!! also end")
@@ -64,4 +70,11 @@ def main(skip_network=False, use_login_file=False):
             pass
 
 
-main()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        prog="Helfercool", description="Command line frontend for helfertool"
+    )
+    parser.add_argument("-u", "--url", type=str, required=True)
+    parser.add_argument("-n", "--username", type=str, required=True)
+    args = parser.parse_args()
+    main(args.url, args.username)
