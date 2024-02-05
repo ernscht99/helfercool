@@ -1,5 +1,6 @@
 # HANDLES ALL NETWORK COMMUNICATION
 import requests as req
+from lxml import html
 
 
 class Session_commander:
@@ -25,8 +26,9 @@ class Session_commander:
 
         # send login request
         resp = self.session.post(self.url_dict["login"], data=login_data)
-
-        # TODO: check if it worked
+        ht = html.document_fromstring(resp.text)
+        if ht.xpath("//ul[contains(@class, 'text-danger')]"):
+            raise Exception("Wrong credentials")
 
     def end_conncection(self):
         pass

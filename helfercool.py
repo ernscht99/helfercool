@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+from getpass import getpass
 
 from session_commander import Session_commander
 
@@ -15,7 +16,7 @@ def main(url, user_name, skip_network=False, use_login_file=False):
     PLS LOG IN :D
     """
     )
-    password = input("Password: ")
+    password = getpass("Password: ")
 
     if not skip_network:
         sc = Session_commander(url)
