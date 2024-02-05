@@ -19,7 +19,9 @@ col_names = [
 
 def get_start_datetime(shifts):
     datetime = shifts["start_date"]
-    if isinstance(shifts["start_time"], dt.datetime):
+    if isinstance(shifts["start_date"], str):
+        import pdb; pdb.set_trace()
+    if isinstance(shifts["start_time"], dt.time):
         datetime = datetime.replace(
             hour=shifts["start_time"].hour, minute=shifts["start_time"].minute
         )
@@ -32,7 +34,7 @@ def get_end_datetime(shifts):
     else:
         # Assume that the time is supposed to refer to start_date
         datetime = shifts["start_date"]
-    if isinstance(shifts["end_time"], dt.datetime):
+    if isinstance(shifts["end_time"], dt.time):
         datetime = datetime.replace(
             hour=shifts["end_time"].hour, minute=shifts["end_time"].minute
         )
