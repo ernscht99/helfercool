@@ -34,7 +34,27 @@ class Session_commander:
 
         # Send Request
         resp = self.session.post(f"{self.url_dict['base']}{festival_id}/jobs/{job_id}/shift/new/", data=data)
-        print(resp)
+
+        if resp.status_code == 200:
+            print("Shift ADDED")
+            return True
+        else:
+            print(resp)
+            return False
+    
+    def add_job(self,data,festival_id):
+        # Add token
+        data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
+
+        # Send Request
+        resp = self.session.post(f"{self.url_dict['base']}{festival_id}/jobs/new/", data=data)
+
+        if resp.status_code == 200:
+            print("Job ADDED")
+            return True
+        else:
+            print(resp)
+            return False
 
     def end_conncection(self):
         pass

@@ -55,10 +55,29 @@ def main(url, user_name, skip_network=False, use_login_file=False):
             pass
         elif selection == 3:
             # add job
-            pass
+            data = {
+                "name_de":"test suff team",
+                "name_en":"test suff team",
+                "description_de":"<p>test suff beschreibung</p>\r\n",
+                "description_en":"<p>test suff beschreibung in englisch</p>\r\n",
+                "important_notes_de":"<p>need saufen und fahren</p>\r\n",
+                "important_notes_en":"<p>dont drinken and driven</p>\r\n",
+                "public":"on",
+                "infection_instruction":"on",
+                # prerequesits fehlen
+            }
+            sc.add_job(data,"s")
         elif selection == 4:
-            # add shifts
-            pass
+            print("Adding shift(s)")
+            data = {
+                "name": "Suff2",
+                "begin_0": "2024-01-25",
+                "begin_1": "11:00",
+                "end_0": "2024-01-25",
+                "end_1": "14:00",
+                "number": "6",
+            }
+            sc.add_shift(data,"s","1")
         elif selection == 5:
             # VALIDITY CHECK SHIFTS
             pass
