@@ -28,6 +28,14 @@ class Session_commander:
 
         # TODO: check if it worked
 
+    def add_shift(self, data,festival_id,job_id):
+        # Add token
+        data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
+
+        # Send Request
+        resp = self.session.post(f"{self.url_dict['base']}{festival_id}/jobs/{job_id}/shift/new/", data=data)
+        print(resp)
+
     def end_conncection(self):
         pass
 
