@@ -17,6 +17,7 @@ def main(url, user_name, skip_network=False, use_login_file=False):
     """
     )
     password = getpass("Password: ")
+    festival_id = input("Enter url sufix for festival: ")
 
     if not skip_network:
         sc = Session_commander(url)
@@ -67,7 +68,7 @@ def main(url, user_name, skip_network=False, use_login_file=False):
                 "infection_instruction":"on",
                 # prerequesits fehlen
             }
-            sc.add_job(data,"s")
+            sc.add_job(data,festival_id)
         elif selection == 4:
             print("Adding shift(s)")
             data = {
@@ -78,7 +79,7 @@ def main(url, user_name, skip_network=False, use_login_file=False):
                 "end_1": "14:00",
                 "number": "6",
             }
-            sc.add_shift(data,"s","1")
+            sc.add_shift(data,festival_id,"1")
         elif selection == 5:
             # VALIDITY CHECK SHIFTS
             pass
