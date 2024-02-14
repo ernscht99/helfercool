@@ -4,10 +4,19 @@ from lxml import html
 
 
 class Session_commander:
-    def __init__(self, url,festival_id):
-        self.url_dict = {"base": url, "login": url + "login/", "festival": url + str(festival_id)}
+    def __init__(self, url, festival_id):
+        self.url_dict = {
+            "base": url,
+            "login": url + "login/",
+            "festival": url + str(festival_id),
+            "jobs": url + "jobs/",
+        }
         self.session = req.Session()
         self.session.get(self.url_dict["login"])
+
+    def _post(self, path, data):
+        data["csrfmiddlewaretoken"] = self.session.cookies["csrftoken"]
+        self.session.post(path, data)
 
     def login_server(self, user_name, password):
         login_data = {
@@ -36,8 +45,7 @@ class Session_commander:
 
         # Send Request
         resp = self.session.post(
-            f"{self.url_dict['festival']}/jobs/{job_id}/shift/new/",
-            data=data
+            f"{self.url_dict['festival']}/jobs/{job_id}/shift/new/", data=data
         )
 
         if resp.status_code == 200:
@@ -49,12 +57,10 @@ class Session_commander:
 
     def add_job(self, data):
         # Add token
-        data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
 
         # Send Request
         resp = self.session.post(
-            f"{self.url_dict['festival']}/jobs/new/", data=data
-        )
+            f"{self.url_dict['festival']}/jobs/new/", data=data)
 
         if resp.status_code == 200:
             print("Job ADDED")
@@ -62,7 +68,7 @@ class Session_commander:
         else:
             print(resp)
             return False
-        
+
     def remove_job(self, job_id):
         pass
 
