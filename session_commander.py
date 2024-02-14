@@ -16,7 +16,11 @@ class Session_commander:
 
     def _post(self, path, data):
         data["csrfmiddlewaretoken"] = self.session.cookies["csrftoken"]
-        self.session.post(path, data)
+        return self.session.post(path, data)
+
+    def _get(self, path, data):
+        data["csrfmiddlewaretoken"] = self.session.cookies["csrftoken"]
+        return self.session.get(path, data)
 
     def login_server(self, user_name, password):
         login_data = {
@@ -40,11 +44,8 @@ class Session_commander:
             raise Exception("Wrong credentials")
 
     def add_shift(self, data, job_id):
-        # Add token
-        data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
-
         # Send Request
-        resp = self.session.post(
+        resp = self._post(
             f"{self.url_dict['festival']}/jobs/{job_id}/shift/new/", data=data
         )
 
@@ -56,10 +57,8 @@ class Session_commander:
             return False
 
     def add_job(self, data):
-        # Add token
-
         # Send Request
-        resp = self.session.post(
+        resp = self._post(
             f"{self.url_dict['festival']}/jobs/new/", data=data)
 
         if resp.status_code == 200:
