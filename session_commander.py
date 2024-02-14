@@ -30,12 +30,15 @@ class Session_commander:
         if ht.xpath("//ul[contains(@class, 'text-danger')]"):
             raise Exception("Wrong credentials")
 
-    def add_shift(self, data,festival_id,job_id):
+    def add_shift(self, data, festival_id, job_id):
         # Add token
         data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
 
         # Send Request
-        resp = self.session.post(f"{self.url_dict['base']}{festival_id}/jobs/{job_id}/shift/new/", data=data)
+        resp = self.session.post(
+            f"{self.url_dict['base']}{festival_id}/jobs/{job_id}/shift/new/",
+            data=data
+        )
 
         if resp.status_code == 200:
             print("Shift ADDED")
@@ -43,13 +46,15 @@ class Session_commander:
         else:
             print(resp)
             return False
-    
-    def add_job(self,data,festival_id):
+
+    def add_job(self, data, festival_id):
         # Add token
         data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
 
         # Send Request
-        resp = self.session.post(f"{self.url_dict['base']}{festival_id}/jobs/new/", data=data)
+        resp = self.session.post(
+            f"{self.url_dict['base']}{festival_id}/jobs/new/", data=data
+        )
 
         if resp.status_code == 200:
             print("Job ADDED")

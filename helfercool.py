@@ -57,17 +57,17 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
         elif selection == 3:
             # add job
             data = {
-                "name_de":"test suff team",
-                "name_en":"test suff team",
-                "description_de":"<p>test suff beschreibung</p>\r\n",
-                "description_en":"<p>test suff beschreibung in englisch</p>\r\n",
-                "important_notes_de":"<p>need saufen und fahren</p>\r\n",
-                "important_notes_en":"<p>dont drinken and driven</p>\r\n",
-                "public":"on",
-                "infection_instruction":"on",
+                "name_de": "test suff team",
+                "name_en": "test suff team",
+                "description_de": "<p>test suff beschreibung</p>\r\n",
+                "description_en": "<p>test suff beschreibung in englisch</p>\r\n",
+                "important_notes_de": "<p>need saufen und fahren</p>\r\n",
+                "important_notes_en": "<p>dont drinken and driven</p>\r\n",
+                "public": "on",
+                "infection_instruction": "on",
                 # prerequesits fehlen
             }
-            sc.add_job(data,festival_id)
+            sc.add_job(data, festival_id)
         elif selection == 4:
             print("Adding shift(s)")
             data = {
@@ -78,7 +78,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
                 "end_1": "14:00",
                 "number": "6",
             }
-            sc.add_shift(data,festival_id,"1")
+            sc.add_shift(data, festival_id, "1")
         elif selection == 5:
             # VALIDITY CHECK SHIFTS
             pass
