@@ -19,6 +19,8 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
     password = getpass("Password: ")
 
     if not skip_network:
+        if url.endswith("/"):
+            url = url[:-1]
         sc = Session_commander(url,festival_id)
 
     # Log in at helfertool

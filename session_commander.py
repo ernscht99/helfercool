@@ -3,24 +3,30 @@ import requests as req
 from lxml import html
 
 
+def _log(method, path, data=None):
+    print(f"{method}: '{path}', data={data}")
+
+
 class Session_commander:
     def __init__(self, url, festival_id):
         self.url_dict = {
             "base": url,
-            "login": url + "login/",
-            "festival": url + str(festival_id),
-            "jobs": url + "jobs/",
+            "login": url + "/login/",
+            "festival": url + "/" + str(festival_id),
         }
+        self.url_dict["jobs"] = self.url_dict["festival"] + "/jobs"
         self.session = req.Session()
         self.session.get(self.url_dict["login"])
 
     def _post(self, path, data):
+        _log("POST", path, data)
         data["csrfmiddlewaretoken"] = self.session.cookies["csrftoken"]
         return self.session.post(path, data)
 
-    def _get(self, path, data):
-        data["csrfmiddlewaretoken"] = self.session.cookies["csrftoken"]
-        return self.session.get(path, data)
+    def _get(self, path):
+        _log("GET", path)
+        data = {"csrfmiddlewaretoken": self.session.cookies["csrftoken"]}
+        return self.session.get(path, data=data)
 
     def login_server(self, user_name, password):
         login_data = {
@@ -46,7 +52,7 @@ class Session_commander:
     def add_shift(self, data, job_id):
         # Send Request
         resp = self._post(
-            f"{self.url_dict['festival']}/jobs/{job_id}/shift/new/", data=data
+            f"{self.url_dict['jobs']}/{job_id}/shift/new/", data=data
         )
 
         if resp.status_code == 200:
@@ -59,7 +65,7 @@ class Session_commander:
     def add_job(self, data):
         # Send Request
         resp = self._post(
-            f"{self.url_dict['festival']}/jobs/new/", data=data)
+            f"{self.url_dict['jobs']}/new/", data=data)
 
         if resp.status_code == 200:
             print("Job ADDED")
@@ -68,7 +74,14 @@ class Session_commander:
             print(resp)
             return False
 
+    def _get_shifts(self):
+        resp = self._get(self.url_dict["jobs"])
+        ht = html.document_fromstring(resp.text)
+        jobs = ht.xpath('//h2')
+        import pdb; pdb.set_trace()
+
     def remove_job(self, job_id):
+        self._get_shifts()
         pass
 
     def end_conncection(self):
