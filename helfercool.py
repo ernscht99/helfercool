@@ -5,7 +5,7 @@ from getpass import getpass
 from session_commander import Session_commander
 
 
-def main(url, user_name, skip_network=False, use_login_file=False):
+def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
     print(
         """
     ---------------------------------------------------
@@ -17,7 +17,6 @@ def main(url, user_name, skip_network=False, use_login_file=False):
     """
     )
     password = getpass("Password: ")
-    festival_id = input("Enter url sufix for festival: ")
 
     if not skip_network:
         sc = Session_commander(url)
@@ -97,5 +96,6 @@ if __name__ == "__main__":
     )
     parser.add_argument("-u", "--url", type=str, required=True)
     parser.add_argument("-n", "--username", type=str, required=True)
+    parser.add_argument("-f", "--festival", type=str, required=True)
     args = parser.parse_args()
-    main(args.url, args.username)
+    main(args.url, args.username, args.festival)
