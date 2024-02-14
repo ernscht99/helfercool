@@ -74,14 +74,13 @@ class Session_commander:
             print(resp)
             return False
 
-    def _get_shifts(self):
+    def _get_jobs(self):
         resp = self._get(self.url_dict["jobs"])
         ht = html.document_fromstring(resp.text)
-        jobs = ht.xpath('//h2')
-        import pdb; pdb.set_trace()
+        headings = ht.xpath('//h2')
+        return [heading.text.strip() for heading in headings]
 
     def remove_job(self, job_id):
-        self._get_shifts()
         pass
 
     def end_conncection(self):
