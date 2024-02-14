@@ -4,8 +4,8 @@ from lxml import html
 
 
 class Session_commander:
-    def __init__(self, url):
-        self.url_dict = {"base": url, "login": url + "login/"}
+    def __init__(self, url,festival_id):
+        self.url_dict = {"base": url, "login": url + "login/", "festival": url + f"{festival_id}/"}
         self.session = req.Session()
         self.session.get(self.url_dict["login"])
 
@@ -30,13 +30,13 @@ class Session_commander:
         if ht.xpath("//ul[contains(@class, 'text-danger')]"):
             raise Exception("Wrong credentials")
 
-    def add_shift(self, data, festival_id, job_id):
+    def add_shift(self, data, job_id):
         # Add token
         data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
 
         # Send Request
         resp = self.session.post(
-            f"{self.url_dict['base']}{festival_id}/jobs/{job_id}/shift/new/",
+            f"{self.url_dict['festival']}/jobs/{job_id}/shift/new/",
             data=data
         )
 
@@ -47,13 +47,13 @@ class Session_commander:
             print(resp)
             return False
 
-    def add_job(self, data, festival_id):
+    def add_job(self, data):
         # Add token
         data.update({"csrfmiddlewaretoken": self.session.cookies["csrftoken"]})
 
         # Send Request
         resp = self.session.post(
-            f"{self.url_dict['base']}{festival_id}/jobs/new/", data=data
+            f"{self.url_dict['festival']}/jobs/new/", data=data
         )
 
         if resp.status_code == 200:
@@ -62,6 +62,9 @@ class Session_commander:
         else:
             print(resp)
             return False
+        
+    def remove_job(self, data):
+        pass
 
     def end_conncection(self):
         pass

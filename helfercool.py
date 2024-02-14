@@ -19,7 +19,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
     password = getpass("Password: ")
 
     if not skip_network:
-        sc = Session_commander(url)
+        sc = Session_commander(url,festival_id)
 
     # Log in at helfertool
     sc.login_server(user_name, password)
@@ -33,8 +33,8 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             3. ADD JOB
             4. ADD SHIFT(S)
             5. VALIDITY CHECK SHIFTS
-            6. CHANGE JOB
-            7. CHANGE SHIFT
+            6. REMOVE JOB
+            7. REMOVE SHIFT
             69. END
             """
         )
@@ -67,7 +67,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
                 "infection_instruction": "on",
                 # prerequesits fehlen
             }
-            sc.add_job(data, festival_id)
+            sc.add_job(data)
         elif selection == 4:
             print("Adding shift(s)")
             data = {
@@ -78,7 +78,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
                 "end_1": "14:00",
                 "number": "6",
             }
-            sc.add_shift(data, festival_id, "1")
+            sc.add_shift(data, 1)
         elif selection == 5:
             # VALIDITY CHECK SHIFTS
             pass
