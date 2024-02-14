@@ -83,8 +83,8 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             # VALIDITY CHECK SHIFTS
             pass
         elif selection == 6:
-            # CHANGE JOB
-            pass
+            print("Remove Job")
+            sc.remove_job(1)
         elif selection == 7:
             # CHANGE SHIFT
             pass

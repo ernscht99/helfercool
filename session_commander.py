@@ -63,7 +63,7 @@ class Session_commander:
             print(resp)
             return False
         
-    def remove_job(self, data):
+    def remove_job(self, job_id):
         pass
 
     def end_conncection(self):
