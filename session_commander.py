@@ -5,7 +5,7 @@ from lxml import html
 
 class Session_commander:
     def __init__(self, url,festival_id):
-        self.url_dict = {"base": url, "login": url + "login/", "festival": url + f"{festival_id}/"}
+        self.url_dict = {"base": url, "login": url + "login/", "festival": url + str(festival_id)}
         self.session = req.Session()
         self.session.get(self.url_dict["login"])
 
