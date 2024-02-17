@@ -80,7 +80,32 @@ class Session_commander:
         headings = ht.xpath('//h2')
         return [heading.text.strip() for heading in headings]
 
+    def add_empty_job(self, title, public=True):
+        data = {
+                "name_de": title,
+                "name_en": title,
+                "description_de": "<p>Beschreibung</p>\r\n",
+                "description_en": "<p>Descrpition</p>\r\n",
+                "important_notes_de": "<p>Wichtige Infos</p>\r\n",
+                "important_notes_en": "<p>Important Notes</p>\r\n",
+                "public": "on" if public else "off",
+                "infection_instruction": "on",
+                }
+        self.add_job(data)
+
+    def add_jobs(self, jobs):
+        for job_title in jobs:
+            self.add_empty_job(job_title)
+        print("Jobs ADDED")
+        print("Jobs that are now online:")
+        for online_job in self._get_jobs():
+            print(online_job)
+
     def remove_job(self, job_id):
+        pass
+
+    def test(self):
+        print(self._get_jobs())
         pass
 
     def end_conncection(self):

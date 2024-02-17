@@ -21,7 +21,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
     if not skip_network:
         if url.endswith("/"):
             url = url[:-1]
-        sc = Session_commander(url,festival_id)
+        sc = Session_commander(url, festival_id)
 
     # Log in at helfertool
     sc.login_server(user_name, password)
@@ -37,6 +37,8 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             5. VALIDITY CHECK SHIFTS
             6. REMOVE JOB
             7. REMOVE SHIFT
+            8. TEST COMMAND
+            9. TEST ENTRY
             69. END
             """
         )
@@ -89,6 +91,12 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             sc.remove_job(1)
         elif selection == 7:
             # CHANGE SHIFT
+            pass
+        elif selection == 8:
+            sc.test()
+            pass
+        elif selection == 9:
+            sc.test()
             pass
 
 
