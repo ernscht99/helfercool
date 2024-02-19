@@ -17,4 +17,5 @@ if __name__ == "__main__":
     passwd = getpass()
     sc = Session_commander(args.url, args.festival)
     sc.login_server(args.username, passwd)
-    sc.add_jobs(list(set(shifts_df["task"])))
+    existing_jobs = sc.get_jobs()
+    sc.add_shifts(shifts_df)

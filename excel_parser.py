@@ -58,9 +58,13 @@ def parse_helper_form(xlsx_file: str):
     # convert helpers to int
     shifts = shifts.astype({"num_helpers": "int"})
 
+    # replace empty subtasks with empty string
+    shifts = shifts.fillna(value={"subtask": ""})
+
     # parse dates
     shifts["start_datetime"] = shifts.apply(get_start_datetime, axis=1)
     shifts["end_datetime"] = shifts.apply(get_end_datetime, axis=1)
+    shifts = shifts.drop(["start_time", "start_date", "end_time", "end_date"], axis=1)
 
     # strip newlines and extra spaces from task titles
     shifts["task"] = shifts["task"].apply(lambda s: s.strip())

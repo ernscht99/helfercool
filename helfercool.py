@@ -39,6 +39,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             7. REMOVE SHIFT
             8. TEST COMMAND
             9. TEST ENTRY
+            10. REMOVE ALL JOBS
             69. END
             """
         )
@@ -53,7 +54,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             print("NICE!!! also end")
             break
         elif selection == 1:
-            for job_title, job_id in sc._get_jobs().items():
+            for job_title, job_id in sc.get_jobs().items():
                 print(f"{job_id:3}: {job_title}")
         elif selection == 2:
             # show shift list
@@ -75,19 +76,19 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
         elif selection == 4:
             print("Adding shift(s)")
             data = {
-                "name": "Suff2",
-                "begin_0": "2024-01-25",
-                "begin_1": "11:00",
-                "end_0": "2024-01-25",
-                "end_1": "14:00",
-                "number": "6",
+                "subtask": "subtask",
+                "start_date": "2024-01-25",
+                "start_time": "11:00",
+                "end_date": "2024-01-25",
+                "end_time": "14:00",
+                "num_helpers": "6",
             }
-            sc.add_shift(data, 1)
+            sc.add_shift(data)
         elif selection == 5:
             # VALIDITY CHECK SHIFTS
             pass
         elif selection == 6:
-            jobs = sc._get_jobs()
+            jobs = sc.get_jobs()
             for job_title, job_id in jobs.items():
                 print(f"{job_id:3}: {job_title}")
             to_del = input("Enter job ID to delete\n")
@@ -104,6 +105,9 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             pass
         elif selection == 9:
             sc.test()
+            pass
+        elif selection == 10:
+            sc.remove_all_jobs()
             pass
 
 
