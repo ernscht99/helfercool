@@ -70,7 +70,7 @@ class Session_commander:
         }
 
         if not visable:
-            data["visable"] = 0
+            data["hidden"] = "on"
 
         if not row["task"] in self.get_jobs():
             self.add_empty_job(row["task"])

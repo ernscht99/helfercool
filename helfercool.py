@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 from getpass import getpass
+import datetime as dt
 
 from session_commander import Session_commander
 
@@ -76,14 +77,13 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
         elif selection == 4:
             print("Adding shift(s)")
             data = {
-                "subtask": "subtask",
-                "start_date": "2024-01-25",
-                "start_time": "11:00",
-                "end_date": "2024-01-25",
-                "end_time": "14:00",
-                "num_helpers": "6",
+                "task": "test suff team",
+                "subtask": "test shift",
+                "start_datetime": dt.datetime(2022, 12, 28, 23, 55, 59, 342380),
+                "end_datetime": dt.datetime(2023, 12, 28, 23, 55, 59, 342380),
+                "num_helpers": 3,
             }
-            sc.add_shift(data)
+            sc.add_shift(data,False)
         elif selection == 5:
             # VALIDITY CHECK SHIFTS
             pass
