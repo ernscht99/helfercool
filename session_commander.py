@@ -82,6 +82,7 @@ class Session_commander:
             return True
         else:
             print(resp)
+            print(f"{row['subtask']} rejected")
             return False
 
     def add_shifts(self, shifts_df):
