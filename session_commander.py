@@ -59,7 +59,7 @@ class Session_commander:
         if ht.xpath("//ul[contains(@class, 'text-danger')]"):
             raise Exception("Wrong credentials")
 
-    def add_shift(self, row):
+    def add_shift(self, row, visable = True):
         data = {
             "name": row["subtask"],
             "begin_0": row["start_datetime"].date().isoformat(),
@@ -68,6 +68,9 @@ class Session_commander:
             "end_1": row["end_datetime"].time().isoformat(),
             "number": str(row["num_helpers"])
         }
+
+        if not visable:
+            data["visable"] = 0
 
         if not row["task"] in self.get_jobs():
             self.add_empty_job(row["task"])
@@ -88,6 +91,12 @@ class Session_commander:
     def add_shifts(self, shifts_df):
         for _, row in shifts_df.iterrows():
             self.add_shift(row)
+
+            # Work with not visable/internal jobs
+            if "num_intern_helpers" in row:
+                if row["num_intern_helpers"]>0:
+                    row["num_helpers"] = row["num_intern_helpers"]
+                    self.add_shift(row,visable=False)
 
     def add_job(self, data):
         # Send Request
