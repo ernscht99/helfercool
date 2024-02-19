@@ -1,6 +1,9 @@
 # HANDLES ALL NETWORK COMMUNICATION
 import requests as req
 from lxml import html
+from regex import search
+
+LOCALE = "de-DE,de;q=0.5"
 
 
 def _log(method, path, data=None):
@@ -15,17 +18,22 @@ class Session_commander:
             "festival": url + "/" + str(festival_id),
         }
         self.url_dict["jobs"] = self.url_dict["festival"] + "/jobs"
+        self.url_dict["helpers"] = self.url_dict["festival"] + "/helpers"
         self.session = req.Session()
         self.session.get(self.url_dict["login"])
 
-    def _post(self, path, data):
+    def _post(self, path, data={}):
         _log("POST", path, data)
         data["csrfmiddlewaretoken"] = self.session.cookies["csrftoken"]
+        data["Accept-Language"] = LOCALE
         return self.session.post(path, data)
 
     def _get(self, path):
         _log("GET", path)
-        data = {"csrfmiddlewaretoken": self.session.cookies["csrftoken"]}
+        data = {
+            "csrfmiddlewaretoken": self.session.cookies["csrftoken"],
+            "Accept-Language": LOCALE,
+        }
         return self.session.get(path, data=data)
 
     def login_server(self, user_name, password):
@@ -52,8 +60,7 @@ class Session_commander:
     def add_shift(self, data, job_id):
         # Send Request
         resp = self._post(
-            f"{self.url_dict['jobs']}/{job_id}/shift/new/", data=data
-        )
+            f"{self.url_dict['jobs']}/{job_id}/shift/new/", data=data)
 
         if resp.status_code == 200:
             print("Shift ADDED")
@@ -64,8 +71,7 @@ class Session_commander:
 
     def add_job(self, data):
         # Send Request
-        resp = self._post(
-            f"{self.url_dict['jobs']}/new/", data=data)
+        resp = self._post(f"{self.url_dict['jobs']}/new/", data=data)
 
         if resp.status_code == 200:
             print("Job ADDED")
@@ -75,22 +81,24 @@ class Session_commander:
             return False
 
     def _get_jobs(self):
-        resp = self._get(self.url_dict["jobs"])
+        resp = self._get(self.url_dict["helpers"])
         ht = html.document_fromstring(resp.text)
-        headings = ht.xpath('//h2')
-        return [heading.text.strip() for heading in headings]
+        headings = [h.text.strip() for h in ht.xpath("//h2")]
+        links = ht.xpath("/html/body/div/div/p/a")
+        ids = [search(r"job/(\d+)", li.get("href")).group(1) for li in links]
+        return {h: i for h, i in zip(headings, ids)}
 
     def add_empty_job(self, title, public=True):
         data = {
-                "name_de": title,
-                "name_en": title,
-                "description_de": "<p>Beschreibung</p>\r\n",
-                "description_en": "<p>Descrpition</p>\r\n",
-                "important_notes_de": "<p>Wichtige Infos</p>\r\n",
-                "important_notes_en": "<p>Important Notes</p>\r\n",
-                "public": "on" if public else "off",
-                "infection_instruction": "on",
-                }
+            "name_de": title,
+            "name_en": title,
+            "description_de": "<p>Beschreibung</p>\r\n",
+            "description_en": "<p>Descrpition</p>\r\n",
+            "important_notes_de": "<p>Wichtige Infos</p>\r\n",
+            "important_notes_en": "<p>Important Notes</p>\r\n",
+            "public": "on" if public else "off",
+            "infection_instruction": "on",
+        }
         self.add_job(data)
 
     def add_jobs(self, jobs):
@@ -102,7 +110,7 @@ class Session_commander:
             print(online_job)
 
     def remove_job(self, job_id):
-        pass
+        self._post(self.url_dict["jobs"] + f"/{job_id}/delete/")
 
     def test(self):
         print(self._get_jobs())

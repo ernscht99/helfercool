@@ -53,8 +53,8 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             print("NICE!!! also end")
             break
         elif selection == 1:
-            # show job list
-            pass
+            for job_title, job_id in sc._get_jobs().items():
+                print(f"{job_id:3}: {job_title}")
         elif selection == 2:
             # show shift list
             pass
@@ -87,8 +87,15 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
             # VALIDITY CHECK SHIFTS
             pass
         elif selection == 6:
-            print("Remove Job")
-            sc.remove_job(1)
+            jobs = sc._get_jobs()
+            for job_title, job_id in jobs.items():
+                print(f"{job_id:3}: {job_title}")
+            to_del = input("Enter job ID to delete\n")
+            if to_del in jobs.values():
+                sc.remove_job(to_del)
+                pass
+            else:
+                print("No job with that ID")
         elif selection == 7:
             # CHANGE SHIFT
             pass
