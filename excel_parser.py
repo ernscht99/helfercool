@@ -6,6 +6,18 @@ from os.path import join
 
 from pandas import DataFrame, concat, read_excel
 
+col_names_24 = [
+    "task",
+    "subtask",
+    "start_date",
+    "start_time",
+    "end_date",
+    "end_time",
+    "num_helpers", 
+    "num_intern_helpers",
+    "num_helpers_total"  
+]
+
 col_names = [
     "task",
     "subtask",
@@ -45,13 +57,29 @@ def is_xlsx(file_name: str):
     return file_name.endswith(".xlsx")
 
 
-def parse_helper_form(xlsx_file: str):
-    shifts = read_excel(
-        xlsx_file,
-        skiprows=4,
-        usecols="A:G",
-        names=col_names,
-    )
+def parse_helper_form(xlsx_file: str, use_v24 = False):
+    if use_v24:
+        shifts = read_excel(
+            xlsx_file,
+            skiprows=4,
+            usecols="A:I",
+            names=col_names_24,
+        )
+        # drop rows that are completely missshapen
+        shifts = shifts.dropna(subset=["num_intern_helpers"])
+
+        # convert helpers to int
+        shifts = shifts.astype({"num_intern_helpers": "int"})
+
+        # currently droped since irrelevant
+        shifts = shifts.drop(["num_helpers_total"], axis=1)
+    else:
+        shifts = read_excel(
+            xlsx_file,
+            skiprows=4,
+            usecols="A:G",
+            names=col_names,
+        )
     # drop rows that are completely missshapen
     shifts = shifts.dropna(subset=["num_helpers"])
 
