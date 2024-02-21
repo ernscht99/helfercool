@@ -13,9 +13,9 @@ col_names_24 = [
     "start_time",
     "end_date",
     "end_time",
-    "num_helpers", 
+    "num_helpers",
     "num_intern_helpers",
-    "num_helpers_total"  
+    "num_helpers_total",
 ]
 
 col_names = [
@@ -31,8 +31,6 @@ col_names = [
 
 def get_start_datetime(shifts):
     datetime = shifts["start_date"]
-    if isinstance(shifts["start_date"], str):
-        import pdb; pdb.set_trace()
     if isinstance(shifts["start_time"], dt.time):
         datetime = datetime.replace(
             hour=shifts["start_time"].hour, minute=shifts["start_time"].minute
@@ -57,7 +55,7 @@ def is_xlsx(file_name: str):
     return file_name.endswith(".xlsx")
 
 
-def parse_helper_form(xlsx_file: str, use_v24 = False):
+def parse_helper_form(xlsx_file: str, use_v24=False):
     if use_v24:
         shifts = read_excel(
             xlsx_file,
@@ -92,7 +90,8 @@ def parse_helper_form(xlsx_file: str, use_v24 = False):
     # parse dates
     shifts["start_datetime"] = shifts.apply(get_start_datetime, axis=1)
     shifts["end_datetime"] = shifts.apply(get_end_datetime, axis=1)
-    shifts = shifts.drop(["start_time", "start_date", "end_time", "end_date"], axis=1)
+    shifts = shifts.drop(
+        ["start_time", "start_date", "end_time", "end_date"], axis=1)
 
     # strip newlines and extra spaces from task titles
     shifts["task"] = shifts["task"].apply(lambda s: s.strip())

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import argparse
-from getpass import getpass
 import datetime as dt
+from getpass import getpass
 
 from session_commander import Session_commander
 
@@ -83,7 +83,7 @@ def main(url, user_name, festival_id, skip_network=False, use_login_file=False):
                 "end_datetime": dt.datetime(2023, 12, 28, 23, 55, 59, 342380),
                 "num_helpers": 3,
             }
-            sc.add_shift(data,False)
+            sc.add_shift(data, False)
         elif selection == 5:
             # VALIDITY CHECK SHIFTS
             pass
